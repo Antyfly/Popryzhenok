@@ -1,0 +1,186 @@
+﻿<Window x:Class="Popryzhenok.Windows.AgentListWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Popryzhenok"
+        mc:Ignorable="d"
+        Title="Попрыженок"
+        MinHeight="450"
+        MinWidth="800"
+        Height="450"
+        Width="800"
+        Style="{StaticResource windows}"
+        WindowStartupLocation="CenterScreen">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition  Width="200" />
+            <ColumnDefinition />
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="75" />
+            <RowDefinition />
+            <RowDefinition Height="40" />
+        </Grid.RowDefinitions>
+
+        <StackPanel Orientation="Horizontal">
+            <Image Source="/Image/Попрыженок.png" />
+            <TextBlock Text="Список агентов"
+                       FontSize="16"
+                       VerticalAlignment="Center" />
+        </StackPanel>
+
+        <ListView x:Name="AgentListView"
+                  Grid.Row="1"
+                  Grid.Column="1"
+                  ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                  SelectionMode="Multiple"
+                  SelectionChanged="AgentListView_SelectionChanged">
+
+            <ListView.ItemContainerStyle>
+                <Style TargetType="{x:Type ListViewItem}">
+                    <Setter Property="HorizontalContentAlignment"
+                            Value="Stretch" />
+                </Style>
+            </ListView.ItemContainerStyle>
+
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <Grid Height="100"
+                          Margin="0,0,0,10"
+                          Background="{Binding Backround}">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition  Width="75" />
+                            <ColumnDefinition />
+                            <ColumnDefinition />
+                        </Grid.ColumnDefinitions>
+
+                        <Grid.RowDefinitions>
+                            <RowDefinition />
+                            <RowDefinition />
+                            <RowDefinition />
+                            <RowDefinition />
+                        </Grid.RowDefinitions>
+
+                        <Border BorderBrush="Black"
+                                Grid.ColumnSpan="6"
+                                Grid.RowSpan="6"
+                                BorderThickness="1" />
+                        <Image Source="{Binding LogoPath}"
+                               Grid.RowSpan="3"
+                               Margin="5" />
+
+
+                        <TextBlock  Grid.Column="1">
+                            <TextBlock.Text>
+                                <MultiBinding StringFormat="{} {0} | {1}">
+                                    <Binding Path="AgentType.Title" />
+                                    <Binding Path="Title" />
+                                </MultiBinding>
+                            </TextBlock.Text>
+                        </TextBlock>
+                        <TextBlock Grid.Row="1"
+                                   Grid.Column="1"
+                                   Text="{Binding Sales, StringFormat='{} {0} продаж за год' }" />
+                        <TextBlock Grid.Row="2"
+                                   Grid.Column="1"
+                                   Text="{Binding Phone}" />
+                        <TextBlock Grid.Row="3"
+                                   Grid.Column="1"
+                                   Text="{Binding Priority, StringFormat='{} Приоритетность: {0} '}" />
+                        <TextBlock Text="{Binding Discount}"
+                                   Grid.Column="2"
+                                   Grid.RowSpan="4"
+                                   VerticalAlignment="Center"
+                                   HorizontalAlignment="Center" />
+                        <Button  x:Name="RedactionButton"
+                                 Content="Редактировать"
+                                 Background="{StaticResource Accentuation}"
+                                 Grid.Column="2"
+                                 Grid.Row="3" />
+                    </Grid>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+
+        <Grid Grid.Row="1">
+            <Grid.RowDefinitions>
+                <RowDefinition />
+                <RowDefinition />
+                <RowDefinition />
+                <RowDefinition />
+                <RowDefinition />
+            </Grid.RowDefinitions>
+
+            <Button HorizontalAlignment="Center"
+                    VerticalAlignment="Center"
+                    Grid.Row="0"
+                    Background="{StaticResource Accentuation}"
+                    Visibility="Hidden"
+                    x:Name="ChangeDiscountButton"
+                    Click="ChangeDiscountButton_Click">
+                <TextBlock  Text="Изменить приоритет"
+                            TextAlignment="Center"
+                            TextWrapping="Wrap" />
+            </Button>
+
+        </Grid>
+
+        <Grid Grid.Column="1"
+              Background="{StaticResource DopColorBackground}">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition />
+                <ColumnDefinition />
+                <ColumnDefinition />
+            </Grid.ColumnDefinitions>
+            <GroupBox Header="Поиск"
+                      Margin="15"
+                      BorderThickness="0">
+                <TextBox  x:Name="PoiskTextBox"
+                          MaxLength="20"
+                          TextChanged="PoiskTextBox_TextChanged" />
+            </GroupBox>
+            <GroupBox Grid.Column="1"
+                      Margin="15"
+                      Header="Сортировка"
+                      BorderThickness="0">
+                <ComboBox  x:Name="SortComboBox"
+                           SelectedIndex="0"
+                           SelectionChanged="SortComboBox_SelectionChanged">
+                    <ComboBoxItem Content="Стандарт" />
+                    <ComboBoxItem Content="Наименование по возрастанию" />
+                    <ComboBoxItem Content="Наименование по убыванию" />
+                    <ComboBoxItem Content="Размер скидки по возрастанию" />
+                    <ComboBoxItem Content="Размер скидки по убыванию" />
+                    <ComboBoxItem Content="Приоритет агента по возрастанию" />
+                    <ComboBoxItem Content="Приоритет агента по убыванию" />
+                </ComboBox>
+            </GroupBox>
+            <GroupBox Grid.Column="2"
+                      Margin="15"
+                      Header="Фильтрация"
+                      BorderThickness="0">
+                <ComboBox  x:Name="FilterComboBox"
+                           SelectedIndex="0"
+                           DisplayMemberPath="Title"
+                           SelectionChanged="FilterComboBox_SelectionChanged">
+                </ComboBox>
+            </GroupBox>
+        </Grid>
+
+        <StackPanel Grid.Row="2"
+                    Grid.Column="1"
+                    HorizontalAlignment="Right"
+                    VerticalAlignment="Center"
+                    Orientation="Horizontal" Margin="0,0,10,0">
+            <Button Content="&lt;"
+                    x:Name="LeftNumberButton"
+                    Background="Transparent" Click="LeftNumberButton_Click" />
+            <StackPanel  Orientation="Horizontal"
+                         x:Name="NumberButtonStackPanel" />
+            <Button Content=">"
+                    x:Name="RightNumberButton"
+                    Background="Transparent" Click="RightNumberButton_Click" />
+        </StackPanel>
+    </Grid>
+</Window>
