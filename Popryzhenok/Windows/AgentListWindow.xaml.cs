@@ -32,10 +32,12 @@ namespace Popryzhenok.Windows
         public AgentListWindow()
         {
             InitializeComponent();
+            GenerateButton();
             var agentTypeList = DatabaseHelper.GetAgentsType();
             agentTypeList.Insert(0, new AgentType { Title = "Все" });
             FilterComboBox.ItemsSource = agentTypeList;
-            AgentListView.ItemsSource = DatabaseHelper.GetAgents().Skip(PerPage).Take(ItemsPerPage);
+            UpdateAgentList();
+           
         }
 
         public void UpdateAgentList()
@@ -59,11 +61,11 @@ namespace Popryzhenok.Windows
                 case "Наименование по убыванию":
                     agents = agents.OrderByDescending(a => a.Title).ToList();
                     break;
-                    //Не робит
+                //Не робит
                 case "Размер скидки по возрастанию":
                     agents = agents.OrderBy(a => a.Sales).ToList();
                     break;
-                    //Не робит
+                //Не робит
                 case "Размер скидки по убыванию":
                     agents = agents.OrderByDescending(a => a.Sales).ToList();
                     break;
@@ -79,8 +81,7 @@ namespace Popryzhenok.Windows
                 agents = agents.Where(a => a.AgentType == (AgentType)FilterComboBox.SelectedItem).ToList();
             }
             
-            AgentListView.ItemsSource = agents;
-            GenerateButton();
+            AgentListView.ItemsSource = agents.Skip(_CurrentPageIndex * 10).Take(10).ToList(); 
         }
 
         private void AgentListView_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -121,8 +122,9 @@ namespace Popryzhenok.Windows
         {
 
             NumberButtonStackPanel.Children.Clear();
-            int pageCount = Convert.ToInt32(Math.Floor((double)AgentListView.Items.Count / ItemsPerPage));
+            int pageCount = Convert.ToInt32(Math.Floor((double)DatabaseHelper.GetAgents().Count / ItemsPerPage));
             FilteredAgentList = DatabaseHelper.GetAgents();
+
             for (int i = 0; i < pageCount; i++)
             {
                 if (ItemsPerPage * i > FilteredAgentList.Count)
@@ -140,21 +142,39 @@ namespace Popryzhenok.Windows
             }
         }
 
+
         private void NewButton_Click(object sender, RoutedEventArgs e)
         {
-           
+            _CurrentPageIndex = Convert.ToInt32((sender as Button).Content.ToString()) - 1;
+            UpdateAgentList();
         }
 
         private void LeftNumberButton_Click(object sender, RoutedEventArgs e)
         {
-            _CurrentPageIndex = _CurrentPageIndex == 0 ? 0 : --_CurrentPageIndex;
-            UpdateAgentList();
+            if (_CurrentPageIndex > 0)
+            {
+                RightNumberButton.IsEnabled = true;
+                _CurrentPageIndex--;
+                UpdateAgentList();
+            }
+            else
+            {
+                LeftNumberButton.IsEnabled = false;
+            }
         }
 
         private void RightNumberButton_Click(object sender, RoutedEventArgs e)
         {
-            _CurrentPageIndex = (_CurrentPageIndex + 1) * ItemsPerPage > FilteredAgentList.Count ? _CurrentPageIndex : ++_CurrentPageIndex;
-            UpdateAgentList();
+            if (((DatabaseHelper.GetAgents().Count / 10)-1) > _CurrentPageIndex)
+            {
+                _CurrentPageIndex++;
+                LeftNumberButton.IsEnabled = true;
+                UpdateAgentList();
+            }
+            else
+            {
+                RightNumberButton.IsEnabled = false;
+            }
         }
     }
 }

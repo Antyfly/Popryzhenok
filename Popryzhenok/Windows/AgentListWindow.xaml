@@ -175,7 +175,9 @@
                     Orientation="Horizontal" Margin="0,0,10,0">
             <Button Content="&lt;"
                     x:Name="LeftNumberButton"
-                    Background="Transparent" Click="LeftNumberButton_Click" />
+                    Background="Transparent"
+                    Click="LeftNumberButton_Click"
+                    IsEnabled="False" />
             <StackPanel  Orientation="Horizontal"
                          x:Name="NumberButtonStackPanel" />
             <Button Content=">"
