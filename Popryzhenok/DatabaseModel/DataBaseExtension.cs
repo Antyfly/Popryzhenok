@@ -24,7 +24,7 @@ namespace Popryzhenok.DatabaseModel
             }
         }
 
-        public string Discount
+        public int Discount
         {
             get
             {
@@ -40,23 +40,23 @@ namespace Popryzhenok.DatabaseModel
 
                 if (sumProduct >= 10000 && sumProduct <= 50000)
                 {
-                    return "5 %";
+                    return 5;
                 }
                 else if (sumProduct >= 50000 && sumProduct <= 150000)
                 {
-                    return "10 %";
+                    return 10;
                 }
                 else if (sumProduct >= 150000 && sumProduct <= 500000)
                 {
-                    return "20 %";
+                    return 20;
                 }
                 else if (sumProduct >= 500000)
                 {
-                    return "25 %";
+                    return 25;
                 }
                 else
                 {
-                    return "0 %";
+                    return 0;
                 }
             }
         }
@@ -66,7 +66,7 @@ namespace Popryzhenok.DatabaseModel
             get
             {
                 var background = Discount;
-                if (background == "25 %")
+                if (background == 25)
                 {
                     return new System.Windows.Media.BrushConverter().ConvertFrom("#FF53E059");
                 }

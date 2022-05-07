@@ -61,13 +61,13 @@ namespace Popryzhenok.Windows
                 case "Наименование по убыванию":
                     agents = agents.OrderByDescending(a => a.Title).ToList();
                     break;
-                //Не робит
+                
                 case "Размер скидки по возрастанию":
-                    agents = agents.OrderBy(a => a.Sales).ToList();
+                    agents = agents.OrderBy(a => a.Discount).ToList();
                     break;
-                //Не робит
+                
                 case "Размер скидки по убыванию":
-                    agents = agents.OrderByDescending(a => a.Sales).ToList();
+                    agents = agents.OrderByDescending(a => a.Discount).ToList();
                     break;
                 case "Приоритет агента по возрастанию":
                     agents = agents.OrderBy(a => a.Priority).ToList();
